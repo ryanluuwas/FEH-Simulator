@@ -1,4 +1,5 @@
 library(dplyr)
+library(ggplot2)
 
 # FEH SUMMON SIMULATOR;
 
@@ -269,7 +270,7 @@ write.csv(sim.df, file = paste(path,'/data/CYL_Banner_Simulation.csv', sep=""), 
 # Statistical Analysis here
 
 # Read CSV
-
+setwd("~/GitHub/FEH-Simulator")
 CYL.df <- read.csv("data/CYL_Banner_Simulation.csv")
 Focus.df <- read.csv("data/Focus_Banner_Simulation.csv")
 Legendary.df <- read.csv("data/Legendary_Banner_Simulation.csv")
@@ -283,3 +284,28 @@ mean(Legendary.df$OrbSpent) # On average, 2095 orbs to +10 a unit Legendary Bann
 sd(CYL.df$OrbSpent) # Standard Deviation is 325 orbs for CYL banner
 sd(Focus.df$OrbSpent) # Standard Deviation is 491 orbs for Focus banner
 sd(Legendary.df$OrbSpent) # Standard Deviation is 609 orbs for Legendary Banner
+
+
+# ggplot
+ggplot(master.df, aes(x = OrbSpent)) +
+  geom_histogram(data = CYL.df,
+                 aes(x = OrbSpent, y = ..count.., fill = 'CYL'),
+                 bins = 50,
+                 color = 'white',
+                 alpha = 0.5) +
+  geom_histogram(data = Focus.df,
+                 aes(x = OrbSpent, y = ..count.., fill = 'Focus'),
+                 bins = 50,
+                 color = 'white',
+                 alpha = 0.5) +
+  geom_histogram(data = Legendary.df,
+                 aes(x = OrbSpent, y = ..count.., fill = 'Legendary'),
+                 bins = 50,
+                 color = 'white',
+                 alpha = 0.5) +
+  theme_minimal() +
+  scale_fill_manual(values = c("#FF0053", "#023FFF", "#02FFF1")) +
+  labs(title = 'Orb Distribution of each Banner',
+       x = 'Orb Spent',
+       y = 'Frequency',
+       fill = 'Banner Type')
